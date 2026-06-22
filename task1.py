@@ -1,28 +1,33 @@
 import pandas as pd
-import numpy as np
 
-#loading file
+# Load dataset
+ex = pd.read_excel("ApexPlanet_DataAnalytics_Dataset - Copy.xlsx")
 
-ex= pd.read_excel("ApexPlanet_DataAnalytics_Dataset - Copy.xlsx")
+# Duplicates
+print("Duplicates before:", ex.duplicated().sum())
+ex = ex.drop_duplicates()
+print("Duplicates after:", ex.duplicated().sum())
 
-"""# finding duplicates
-
-print("your duplicat: ",ex.duplicated().sum())
-
-# finding info
-
-print(ex.info())
-
-#finding null values
-
-print(ex.isnull().sum())
-ex["Age"]= ex["Age"].fillna(0)
-ex["City"]=ex["City"].fillna("N/A") # we can also do ex.fillna()
+# Missing values
 print(ex.isnull().sum())
 
-#checking format
+# Fill missing values
+ex["Age"] = ex["Age"].fillna(0)
+ex["City"] = ex["City"].fillna("N/A")
+
+# Standardize text
+ex["City"] = ex["City"].str.strip().str.title()
+
+# Date conversion
+ex["Order_Date"] = pd.to_datetime(ex["Order_Date"])
+
+# Check unique values
 print(ex["City"].unique())
+
+# Statistics
 print(ex.describe())
-print(ex["Age"])
-"""
-print(ex.to_csv())
+
+# Save cleaned dataset
+ex.to_csv("cleaned_dataset.csv", index=False)
+
+print("Dataset cleaned and saved successfully.")
